@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Details and Resume</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #b3e2f8;
+            color: #404446;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #98a1a5;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(60, 70, 67, 0.1);
+        }
+
+        h1, h2 {
+            color: #265a91;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #778388;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #8b6969;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #90c0f3;
+            color: rgb(218, 149, 149);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c9e939;
+        }
+
+        #downloadLink {
+            display: block;
+            margin-top: 20px;
+            background-color: #19fd4e;
+            color: rgb(252, 222, 124);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: none;
+        }
+
+        #downloadLink:hover {
+            background-color: #60f380;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        #uploadImageButton {
+            background-color: #1ceec0;
+            color: rgba(195, 234, 250, 0);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #uploadImageButton:hover {
+            background-color: #f0d6c7;
+        }
+
+        #resumeOutput {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: left;
+            background-color:grey;
+            border-style: solid;
+            border-width: 10px;
+            box-shadow: 0 0 10px rgba(78, 22, 22, 0.1);
+        }
+
+        #resumeOutput img {
+            width: 200px;
+            height: 200px;
+            border-style:dashed;
+            border-width:5px;
+            border-radius: 50%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personal Details</h1>
+        <form id="personalDetailsForm">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="education">Education:</label>
+                <input type="text" id="education" required>
+            </div>
+            <div class="form-group">
+                <label for="skills">Skills:</label>
+                <input type="text" id="skills" required>
+            </div>
+            <div class="form-group">
+                <label for="projects">Projects:</label>
+                <input type="text" id="projects" required>
+            </div>
+            <div class="form-group">
+                <label for="certificates">Certificates:</label>
+                <input type="text" id="certificates" required>
+            </div>
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information:</label>
+                <textarea id="additionalInfo"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div>
+                <input type="file" id="imageUpload" style="display: none;">
+                <button id="uploadImageButton">Upload Image</button>
+            </div>
+            <button type="submit">Generate Resume</button>
+        </form>
+    </div>
+
+    <div id="resumeOutput" class="container">
+        <h1 style="text-align:center;">Resume</h1>
+        <div id="resumeContent">
+            <!-- Output details and uploaded image will be displayed here using JavaScript -->
+        </div>
+        <a id="downloadLink" download="resume.html" href="#">Download Resume</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    const personalDetailsForm = document.getElementById("personalDetailsForm");
+    const resumeOutput = document.getElementById("resumeContent");
+    const downloadLink = document.getElementById("downloadLink");
+    const imageUpload = document.getElementById("imageUpload");
+    const uploadImageButton = document.getElementById("uploadImageButton");
+
+    let uploadedImage; // Variable to store the uploaded image
+
+    // Handle image upload
+    uploadImageButton.addEventListener("click", function() {
+        imageUpload.click();
+    });
+
+    imageUpload.addEventListener("change", function() {
+        uploadedImage = imageUpload.files[0];
+    });
+
+    personalDetailsForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const fullName = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const education = document.getElementById("education").value;
+        const skills = document.getElementById("skills").value;
+        const projects = document.getElementById("projects").value;
+        const certificates = document.getElementById("certificates").value;
+        const additionalInfo = document.getElementById("additionalInfo").value;
+        const dob = document.getElementById("dob").value;
+
+        // Build the resume HTML
+        let resumeHTML = '';
+
+        // Display the uploaded image at the top of the resume HTML if available
+        if (uploadedImage) {
+            const imageURL = URL.createObjectURL(uploadedImage);
+            resumeHTML += `<img src="${imageURL}" alt="Uploaded Image" height:50% style="max-width: 100%; height: auto; margin: 20px 0; display:block; margin-left:auto; margin-right:auto; width:50%;">`;
+        }
+
+        // Add the rest of the resume details
+        resumeHTML += `
+            <h1 style="text-align: center; width: 450px; margin-left:100px; border-radius: 5px;border-style:solid; border-color:yellow; background:blue;">${fullName}</h2>
+            <p style="margin-left:100px; border-style:dotted; background:green;">Email: ${email}</p>
+            <p style="margin-left:100px; border-style:dotted; background:pink;">Phone: ${phone}</p>
+            <p style="margin-left:100px; border-style:dotted; background:violet;">Education: ${education}</p>
+            <p style="margin-left:100px; border-style:dotted; background:orange;">Skills: ${skills}</p>
+            <p style="margin-left:100px; border-style:dotted; background:brown;">Projects: ${projects}</p>
+            <p style="margin-left:100px; border-style:dotted; background:green;">Certificates: ${certificates}</p>
+            <p style="margin-left:100px; border-style:dotted; background:grey;">Additional Information: ${additionalInfo}</p>
+            <p style="margin-left:100px; border-style:dotted; background:orange;">Date of Birth: ${dob}</p>
+        `;
+
+        // Display the resume HTML
+        resumeOutput.innerHTML = resumeHTML;
+
+        // Create a Blob with the resume HTML and generate a download link
+        const blob = new Blob([resumeHTML], { type: 'text/html' });
+        const objectURL = URL.createObjectURL(blob);
+        downloadLink.href = objectURL;
+        downloadLink.style.display = "block";
+    });
+});
+
+</script>
